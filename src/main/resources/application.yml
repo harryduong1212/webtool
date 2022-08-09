@@ -4,7 +4,7 @@ spring:
 ### config datasource - postgreSQL
   datasource:
     private:
-      url: jdbc:postgresql://localhost:5430/his?currentSchema=webtool
+      url: jdbc:postgresql://localhost:3333/his?currentSchema=webtool
       username: postgres
       password: 123zxc123
       sqlScriptEncoding: UTF-8
