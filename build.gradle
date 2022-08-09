@@ -1,14 +1,31 @@
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath('org.liquibase:liquibase-gradle-plugin:2.0.4') {
+			// exclude(module: 'liquibase-core')   // exclude the dependency on liquibase-core:3.3.5
+		}
+	}
+}
+
 plugins {
 	id 'org.springframework.boot' version '2.7.2'
 	id 'io.spring.dependency-management' version '1.0.12.RELEASE'
 	id 'java'
 }
 
-group = 'com.his'
+apply plugin: 'org.liquibase.gradle'
+
+group = 'com.his.webtool'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
 configurations {
+	developmentOnly
+	runtimeClasspath {
+		extendsFrom developmentOnly
+	}
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
@@ -19,22 +36,53 @@ repositories {
 }
 
 dependencies {
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	runtimeOnly 'org.postgresql:postgresql'
+	liquibaseRuntime("org.liquibase:liquibase-core")
+	liquibaseRuntime("org.postgresql:postgresql")
+
+	implementation 'org.liquibase:liquibase-core'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.liquibase:liquibase-core'
+	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'org.springframework.session:spring-session-core'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
-	compileOnly 'org.projectlombok:lombok'
+
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'org.postgresql:postgresql'
-	annotationProcessor 'org.projectlombok:lombok'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 }
 
-tasks.named('test') {
+test {
+	enabled = false
 	useJUnitPlatform()
+}
+
+springBoot {
+	mainClass = 'com.his.webtool.StartupApplication'
+}
+
+bootJar {
+	mainClass = 'com.his.webtool.StartupApplication'
+}
+
+liquibase {
+	// def configuration = new Properties()
+	// file('./src/misc/resources/migration/configuration.yml').withInputStream { inputStream ->
+	// configuration.load(inputStream)
+	// }
+	activities {
+		main {
+			changeLogFile './src/main/resources/db/changelog/changelog.xml'
+			url 'jdbc:postgresql://127.0.0.1:3333/his?currentSchema=webtool&useUnicode=true&characterEncoding=UTF-8'
+			username 'postgres'
+			password '123zxc123'
+		}
+	}
 }
