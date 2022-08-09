@@ -5,30 +5,31 @@ DO $$
   BEGIN
     CREATE TABLE IF NOT EXISTS users (
       id BIGSERIAL PRIMARY KEY,
-      first_name varchar[50],
-      last_name varchar[50],
-      day_of_birth date,
-      address json,
-      phone_number varchar[15],
-      email varchar[50],
-      role_code varchar[10]
+      first_name TEXT,
+      last_name TEXT,
+      day_of_birth DATE,
+      address JSONB,
+      phone_number TEXT,
+      email TEXT,
+      role_code TEXT
     );
 
     CREATE TABLE IF NOT EXISTS role (
-      code varchar[10] PRIMARY KEY,
-      name jsonb
+      code TEXT PRIMARY KEY,
+      name JSONB
     );
 
     CREATE TABLE IF NOT EXISTS authority (
-      code varchar[10] PRIMARY KEY,
-      name jsonb,
-      options
+      code TEXT PRIMARY KEY,
+      name JSONB,
+      options JSONB
     );
 
     CREATE TABLE IF NOT EXISTS role_authority (
-      role_code varchar[10],
-      authority_code varchar[10],
-      authority_div varchar[50]
+      role_code TEXT,
+      authority_code TEXT,
+      authority_div TEXT,
+
       PRIMARY KEY (role_code, authority_code)
     );
 
@@ -38,17 +39,19 @@ DO $$
 
     ALTER TABLE role_authority ADD FOREIGN KEY (authority_code) REFERENCES authority (code);
 
-    INSERT INTO authority (code, name,
-                        options)
-    VALUES ("ACCOUNT_REGISTER", "{\"en\":\"Account register\"}",
-            "{\"DISABLE\":{\"en\":\"DISABLE\"},\"REGISTER\":{\"en\":\"REGISTER\"},\"REFERENCE\":{\"en\":\"REFERENCE\"}}") ON CONFLICT DO UPDATE;
+    INSERT INTO authority (code, name, options)
+    VALUES ('ACCOUNT_REGISTER', '{"en": "Account register"}',
+		   '{"ENABLE": {"en": "ENABLE"}, "DISABLE": {"en": "DISABLE"}, "REFERENCE": {"en":"REFERENCE"}}')
+    ON CONFLICT DO NOTHING;
 
     INSERT INTO role (code, name)
-    VALUES ("USER", "{\"en\":\"User role\"}")
-         , ("ADMIN", "{\"en\":\"Admin role\"}") ON CONFLICT DO UPDATE;
+    VALUES ('USER', '{"en": "User role"}')
+         , ('ADMIN', '{"en": "Admin role"}')
+    ON CONFLICT DO NOTHING;
 
     INSERT INTO role_authority (role_code, authority_code, authority_div)
-    VALUES ("USER", "ACCOUNT_REGISTER", "")
-         , ("ADMIN", "ACCOUNT_REGISTER") ON CONFLICT DO UPDATE;
+    VALUES ('USER', 'ACCOUNT_REGISTER', 'REGISTER')
+         , ('ADMIN', 'ACCOUNT_REGISTER', 'REGISTER')
+    ON CONFLICT DO NOTHING;
   END;
 $$;
