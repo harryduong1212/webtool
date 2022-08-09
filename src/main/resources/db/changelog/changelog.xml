@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd
+  http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+  
+  <changeSet id="202208071000_init_database" author="hoanglinh.duong" labels="202208071000_init_database">
+    <sqlFile 
+      path="sql/202208071000_init_database.sql"
+      dbms="postgresql"  
+      encoding="UTF-8"
+      endDelimiter=";"
+      relativeToChangelogFile="true"
+      splitStatements="false"  
+      stripComments="true"/> 
+    <rollback>
+      <sqlFile 
+        path="./src/main/resources/changelog/sql/rollback/202208071000_init_database.sql"
+        encoding="UTF-8" 
+        endDelimiter=";"
+        splitStatements="false"/>
+    </rollback>
+  </changeSet>
+
+  <!--next changeSet-->
+
+</databaseChangeLog>
