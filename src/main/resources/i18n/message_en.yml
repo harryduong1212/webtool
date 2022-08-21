@@ -1,0 +1,5 @@
+CR1024: "Resource not found: {0}"
+CR1025: "Unable to insert into {0}"
+CR1026: "Unable to obtain {0}"
+CR1027: "Unable to update {0}"
+CR1028: "Unable to delete {0}"

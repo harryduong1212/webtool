@@ -1,9 +1,11 @@
 package com.his.webtool.config;
 
+import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -13,6 +15,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.session.NullAuthenticatedSessionStrategy;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.his.webtool.filter.JwtTokenFilter;
+import com.his.webtool.handler.CustomAuthenticationFailureHandler;
+import com.his.webtool.provider.UserDetailsAuthenticationProvider;
 
 @Configuration
 @EnableWebSecurity
@@ -21,9 +28,13 @@ public class WebSecurityConfig {
 
   private final UserDetailsService userDetailsService;
 
-  private final AuthEntryPointJwt unauthorizedHandler;
+  private final ObjectMapper objectMapper;
 
-  private final AuthTokenFilter authenticationJwtTokenFilter;
+  private final UserDetailsAuthenticationProvider authenticationProvider;
+
+  private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
+
+  private final String tokenHeader = "x-auth";
 
   @Bean
   public PasswordEncoder passwordEncoder() {
@@ -31,9 +42,8 @@ public class WebSecurityConfig {
   }
 
   @Bean
-  public AuthenticationManager authenticationManager(
-      AuthenticationConfiguration authenticationConfiguration) throws Exception {
-    return authenticationConfiguration.getAuthenticationManager();
+  public AuthenticationManager authenticationManager() {
+    return new ProviderManager(Collections.singletonList(authenticationProvider));
   }
 
   @Bean
@@ -47,8 +57,31 @@ public class WebSecurityConfig {
         .antMatchers("/users/login", "/users/register").permitAll()
         .anyRequest().authenticated();
 
-    http.addFilterBefore(authenticationJwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+    http.addFilterBefore(authenticationTokenFilter(tokenHeader),
+        UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
+  }
+
+  /**
+   * To addFilterBefore for HttpSecurity
+   *
+   * @param tokenHeader token header
+   * @return FirebaseAuthenticationTokenFilter
+   * @throws Exception
+   */
+  public JwtTokenFilter authenticationTokenFilter(String tokenHeader)
+      throws Exception {
+    JwtTokenFilter authenticationTokenFilter = new JwtTokenFilter(tokenHeader, objectMapper);
+
+    authenticationTokenFilter.setAuthenticationManager(authenticationManager());
+    authenticationTokenFilter.setAuthenticationSuccessHandler(
+        (request, response, authentication) -> {});
+    authenticationTokenFilter.setSessionAuthenticationStrategy(
+        new NullAuthenticatedSessionStrategy());
+    authenticationTokenFilter.setAllowSessionCreation(false);
+    authenticationTokenFilter.setAuthenticationFailureHandler(customAuthenticationFailureHandler);
+
+    return authenticationTokenFilter;
   }
 }

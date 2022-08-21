@@ -44,6 +44,12 @@ public class Users {
   @Column(name = "email")
   private String email;
 
+  @Column(name = "username")
+  private String username;
+
+  @Column(name = "password")
+  private String password;
+
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private Role role;
 }

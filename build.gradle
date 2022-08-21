@@ -56,6 +56,10 @@ dependencies {
 
 	implementation 'org.modelmapper:modelmapper:2.4.0'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	implementation 'org.apache.commons:commons-lang3:3.9'
+
+	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
@@ -82,7 +86,7 @@ liquibase {
 	activities {
 		main {
 			changeLogFile './src/main/resources/db/changelog/changelog.xml'
-			url 'jdbc:postgresql://127.0.0.1:3333/his?currentSchema=webtool&useUnicode=true&characterEncoding=UTF-8'
+			url 'jdbc:postgresql://127.0.0.1:5430/his?currentSchema=webtool&useUnicode=true&characterEncoding=UTF-8'
 			username 'postgres'
 			password '123zxc123'
 		}
