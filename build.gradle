@@ -86,7 +86,7 @@ liquibase {
 	activities {
 		main {
 			changeLogFile './src/main/resources/db/changelog/changelog.xml'
-			url 'jdbc:postgresql://127.0.0.1:5430/his?currentSchema=webtool&useUnicode=true&characterEncoding=UTF-8'
+			url 'jdbc:postgresql://127.0.0.1:3333/his?currentSchema=webtool&useUnicode=true&characterEncoding=UTF-8'
 			username 'postgres'
 			password '123zxc123'
 		}

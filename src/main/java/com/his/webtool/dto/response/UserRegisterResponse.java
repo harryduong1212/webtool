@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Map;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -15,7 +16,7 @@ public class UserRegisterResponse extends BaseResponse {
   private String firstName;
   private String lastName;
   private LocalDate dayOfBirth;
-  private HashMap<String, Object> address;
+  private Map<String, Object> address;
   private String phoneNumber;
   private String email;
   private String roleCode;

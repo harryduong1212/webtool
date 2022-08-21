@@ -28,7 +28,7 @@ public class ExceptionCodeResolverImpl implements ExceptionCodeResolver {
    * Exception code used when it could not be resolved using the mapping rules.
    * </p>
    */
-  private String defaultExceptionCode;
+  private String defaultExceptionCode = "SI";
 
   /**
    * Resolves exception code.

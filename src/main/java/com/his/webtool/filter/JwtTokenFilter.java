@@ -1,19 +1,5 @@
 package com.his.webtool.filter;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationServiceException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.his.webtool.common.ApiError;
 import com.his.webtool.common.JsonResponseBuilder;
@@ -22,8 +8,21 @@ import com.his.webtool.exception.InvalidRequestException;
 import com.his.webtool.provider.JwtToken;
 import com.his.webtool.wrapper.BaseRequestHttpRequestWrapper;
 import com.nimbusds.oauth2.sdk.util.StringUtils;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 @Log4j2
 public class JwtTokenFilter extends AbstractAuthenticationProcessingFilter {

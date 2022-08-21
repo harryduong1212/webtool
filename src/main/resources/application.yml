@@ -3,7 +3,7 @@
 spring:
   ### config datasource - postgreSQL
   datasource:
-    url: jdbc:postgresql://localhost:5430/his?currentSchema=webtool
+    url: jdbc:postgresql://localhost:3333/his?currentSchema=webtool
     username: postgres
     password: 123zxc123
     sqlScriptEncoding: UTF-8
@@ -27,6 +27,11 @@ spring:
       ddl-auto: none
     show-sql: true
     generate-ddl: true
+
+  ### message
+  messages:
+    basename: i18n/message,i18n/app-message,i18n/validation-message
+    encoding: utf-8
 
 ### enable logging
 logging:

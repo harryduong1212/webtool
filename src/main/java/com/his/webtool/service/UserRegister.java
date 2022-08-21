@@ -5,15 +5,18 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Map;
 
 public interface UserRegister extends IService<UserRegister.Input, UserRegister.Output> {
 
   @Data
   class Input {
+    private String username;
+    private String password;
     private String firstName;
     private String lastName;
     private LocalDate dayOfBirth;
-    private HashMap<String, Object> address;
+    private Map<String, Object> address;
     private String phoneNumber;
     private String email;
     private String roleCode;
@@ -22,10 +25,15 @@ public interface UserRegister extends IService<UserRegister.Input, UserRegister.
   @Data
   class Output {
     private Long id;
+    private String username;
+    private String password;
     private String firstName;
     private String lastName;
+
+
+
     private LocalDate dayOfBirth;
-    private HashMap<String, Object> address;
+    private Map<String, Object> address;
     private String phoneNumber;
     private String email;
     private String roleCode;

@@ -1,14 +1,17 @@
 package com.his.webtool.config;
 
-import java.util.Collections;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.his.webtool.filter.JwtTokenFilter;
+import com.his.webtool.handler.CustomAuthenticationFailureHandler;
+import com.his.webtool.provider.UserDetailsAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,17 +19,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.session.NullAuthenticatedSessionStrategy;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.his.webtool.filter.JwtTokenFilter;
-import com.his.webtool.handler.CustomAuthenticationFailureHandler;
-import com.his.webtool.provider.UserDetailsAuthenticationProvider;
+
+import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
-  private final UserDetailsService userDetailsService;
+//  private final UserDetailsService userDetailsService;
 
   private final ObjectMapper objectMapper;
 
@@ -53,14 +54,18 @@ public class WebSecurityConfig {
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
         .authorizeRequests()
-        // permit all user login and register request
-        .antMatchers("/users/login", "/users/register").permitAll()
         .anyRequest().authenticated();
 
     http.addFilterBefore(authenticationTokenFilter(tokenHeader),
         UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
+  }
+
+  @Bean
+  public WebSecurityCustomizer webSecurityCustomizer() {
+    // permit all user login and register request
+    return (web) -> web.ignoring().antMatchers("/users/login", "/users/register");
   }
 
   /**

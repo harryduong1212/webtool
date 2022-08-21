@@ -10,10 +10,17 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Map;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class UserRegisterRequest extends BaseRequest {
+
+  @NotBlank
+  private String username;
+
+  @NotBlank
+  private String password;
 
   @NotBlank
   private String firstName;
@@ -24,7 +31,7 @@ public class UserRegisterRequest extends BaseRequest {
   @NotNull
   private LocalDate dayOfBirth;
 
-  private HashMap<String, Object> address;
+  private Map<String, Object> address;
 
   @NotBlank
   @Pattern(regexp = RegexConst.PHONE_NUMBER)

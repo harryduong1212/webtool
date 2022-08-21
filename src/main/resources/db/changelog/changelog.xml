@@ -42,6 +42,24 @@
     </rollback>
   </changeSet>
 
+  <changeSet id="202208212000_change_address_type_to_text_users_table" author="hoanglinh.duong" labels="202208212000_change_address_type_to_text_users_table">
+    <sqlFile
+        path="sql/202208212000_change_address_type_to_text_users_table.sql"
+        dbms="postgresql"
+        encoding="UTF-8"
+        endDelimiter=";"
+        relativeToChangelogFile="true"
+        splitStatements="false"
+        stripComments="true"/>
+    <rollback>
+      <sqlFile
+          path="./src/main/resources/changelog/sql/rollback/202208212000_change_address_type_to_text_users_table.sql"
+          encoding="UTF-8"
+          endDelimiter=";"
+          splitStatements="false"/>
+    </rollback>
+  </changeSet>
+
   <!--next changeSet-->
 
 </databaseChangeLog>

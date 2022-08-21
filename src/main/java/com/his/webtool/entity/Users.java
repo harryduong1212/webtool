@@ -1,6 +1,7 @@
 package com.his.webtool.entity;
 
 import lombok.Data;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,12 +11,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import java.time.LocalDate;
-import java.util.HashMap;
+import java.util.Map;
 
 @Data
 @Entity
@@ -36,7 +34,7 @@ public class Users {
   private LocalDate dayOfBirth;
 
   @Column(name = "address")
-  private HashMap<String, Object> address;
+  private String address;
 
   @Column(name = "phone_number")
   private String phoneNumber;
