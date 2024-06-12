@@ -3,15 +3,15 @@ buildscript {
 		mavenCentral()
 	}
 	dependencies {
-		classpath('org.liquibase:liquibase-gradle-plugin:2.0.4') {
+		classpath('org.liquibase:liquibase-gradle-plugin:2.2.2') {
 			// exclude(module: 'liquibase-core')   // exclude the dependency on liquibase-core:3.3.5
 		}
 	}
 }
 
 plugins {
-	id 'org.springframework.boot' version '2.7.2'
-	id 'io.spring.dependency-management' version '1.0.12.RELEASE'
+	id 'org.springframework.boot' version '3.3.0'
+	id 'io.spring.dependency-management' version '1.1.5'
 	id 'java'
 }
 
@@ -19,7 +19,12 @@ apply plugin: 'org.liquibase.gradle'
 
 group = 'com.his.webtool'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
 
 configurations {
 	developmentOnly
@@ -36,29 +41,31 @@ repositories {
 }
 
 dependencies {
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-
-	runtimeOnly 'org.postgresql:postgresql'
 	liquibaseRuntime("org.liquibase:liquibase-core")
+	liquibaseRuntime 'info.picocli:picocli:4.6.3'
 	liquibaseRuntime("org.postgresql:postgresql")
 
-	implementation 'org.liquibase:liquibase-core'
-	implementation 'org.springframework.boot:spring-boot-starter-validation:2.5.12'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation 'org.liquibase:liquibase-core'
 	implementation 'org.springframework.session:spring-session-core'
-	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
-
-	implementation 'org.modelmapper:modelmapper:2.4.0'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+	implementation 'org.modelmapper:modelmapper:3.1.1'
+	implementation 'org.postgresql:r2dbc-postgresql'
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'org.postgresql:r2dbc-postgresql'
+	annotationProcessor 'org.projectlombok:lombok'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'io.projectreactor:reactor-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 test {
@@ -82,9 +89,9 @@ liquibase {
 	activities {
 		main {
 			changeLogFile './src/main/resources/db/changelog/changelog.xml'
-			url 'jdbc:postgresql://127.0.0.1:3333/his?currentSchema=webtool&useUnicode=true&characterEncoding=UTF-8'
+			url 'jdbc:postgresql://127.0.0.1:5432/his?currentSchema=webtool&useUnicode=true&characterEncoding=UTF-8'
 			username 'postgres'
-			password '123zxc123'
+			password 'admin'
 		}
 	}
 }

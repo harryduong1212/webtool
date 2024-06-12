@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Mono;
 
 @Service
 @Slf4j
@@ -11,14 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 public abstract class BaseService<I, O> implements IService<I, O> {
   /**
    * Execute the service process
-   * <ul>
-   * <li>perform pre-execute abstract process
-   * <li>perform do-execute abstract process
-   * <li>perforn post-execute abstract process</li>
-   * </ul>
    */
   @Override
-  public O execute(I input) {
+  public Mono<O> execute(I input) {
     try {
       /* Perform pre-execute */
       preExecute(input);
@@ -33,8 +29,7 @@ public abstract class BaseService<I, O> implements IService<I, O> {
   }
 
   /**
-   * Handle validation... and all the process before doing the main process of the
-   * service.
+   * Handle validation... and all the process before doing the main process of the service.
    *
    * @param input {@link I}
    */
@@ -44,9 +39,9 @@ public abstract class BaseService<I, O> implements IService<I, O> {
    * Process business
    *
    * @param input {@link I}
-   * @return {@link O}
+   * @return {@link Mono<O>}
    */
-  protected abstract O doExecute(I input);
+  protected abstract Mono<O> doExecute(I input);
 
   /**
    * Clean all unnecessary object before the process is done
@@ -54,4 +49,5 @@ public abstract class BaseService<I, O> implements IService<I, O> {
    * @param input {@link I}
    */
   protected abstract void postExecute(I input);
+
 }

@@ -1,31 +1,18 @@
 package com.his.webtool.entity;
 
 import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import java.util.HashMap;
-import java.util.Set;
+import java.util.Map;
 
 @Data
-@Entity
-@Table
+@Table("authority")
 public class Authority {
 
-  @Id
-  @Column(name = "code")
-  private String code;
+    @Id
+    private String code;
+    private Map<String, Object> name;
+    private Map<String, Object> options;
 
-  @Column(name = "name")
-  private HashMap<String, Object> name;
-
-  @Column(name = "options")
-  private HashMap<String, Object> options;
-
-  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-  private Set<Role> roles;
 }
