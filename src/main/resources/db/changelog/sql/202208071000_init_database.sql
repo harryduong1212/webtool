@@ -3,8 +3,10 @@
 -- changeset hoanglinh.duong:202208071000_init_database
 DO $$
   BEGIN
-    CREATE TABLE IF NOT EXISTS users (
+    CREATE TABLE IF NOT EXISTS user_inform (
       id BIGSERIAL PRIMARY KEY,
+      username TEXT UNIQUE NOT NULL,
+      password TEXT,
       first_name TEXT,
       last_name TEXT,
       day_of_birth DATE,
@@ -33,7 +35,7 @@ DO $$
       PRIMARY KEY (role_code, authority_code)
     );
 
-    ALTER TABLE users ADD FOREIGN KEY (role_code) REFERENCES role (code);
+    ALTER TABLE user_inform ADD FOREIGN KEY (role_code) REFERENCES role (code);
 
     ALTER TABLE role_authority ADD FOREIGN KEY (role_code) REFERENCES role (code);
 
@@ -50,8 +52,8 @@ DO $$
     ON CONFLICT DO NOTHING;
 
     INSERT INTO role_authority (role_code, authority_code, authority_div)
-    VALUES ('USER', 'ACCOUNT_REGISTER', 'REGISTER')
-         , ('ADMIN', 'ACCOUNT_REGISTER', 'REGISTER')
+    VALUES ('USER', 'ACCOUNT_REGISTER', 'ENABLE')
+         , ('ADMIN', 'ACCOUNT_REGISTER', 'ENABLE')
     ON CONFLICT DO NOTHING;
   END;
 $$;
