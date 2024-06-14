@@ -4,6 +4,7 @@ import com.his.webtool.entity.UserInform;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
@@ -13,8 +14,10 @@ import java.util.List;
 @AllArgsConstructor
 public class UserDetailPrinciple implements UserDetails {
 
+    private Long userId;
     private String username;
     private String password;
+    private String roleCode;
     private List<GrantedAuthority> authorities;
 
     /**
@@ -24,7 +27,11 @@ public class UserDetailPrinciple implements UserDetails {
      * @return {@link UserDetailPrinciple}
      */
     public static UserDetailPrinciple fromUserInform(final UserInform userInform) {
-        return new UserDetailPrinciple(userInform.getUsername(), userInform.getPassword(), new ArrayList<>());
+        return new UserDetailPrinciple(userInform.getId(),
+                userInform.getUsername(),
+                userInform.getPassword(),
+                userInform.getRoleCode(),
+                List.of(new SimpleGrantedAuthority(userInform.getRoleCode())));
     }
 
 }
