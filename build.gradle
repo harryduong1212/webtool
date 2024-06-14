@@ -45,6 +45,7 @@ dependencies {
 	liquibaseRuntime 'info.picocli:picocli:4.6.3'
 	liquibaseRuntime("org.postgresql:postgresql")
 
+
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
@@ -58,9 +59,13 @@ dependencies {
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 	implementation 'org.modelmapper:modelmapper:3.1.1'
 	implementation 'org.postgresql:r2dbc-postgresql'
+	implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.postgresql:r2dbc-postgresql'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
 	annotationProcessor 'org.projectlombok:lombok'
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.projectreactor:reactor-test'
